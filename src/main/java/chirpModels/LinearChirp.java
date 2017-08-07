@@ -16,6 +16,10 @@ public class LinearChirp implements ChirpFitFunction {
 		return Sinusoid;
 	}
 
+	
+	/*Gradient function
+	 * 
+	 */
 	public double grad(double[] x, double[] a, double[] b, int k) {
 		final int totaltime = x.length;
 		
