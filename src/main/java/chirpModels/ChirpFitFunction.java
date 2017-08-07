@@ -5,15 +5,15 @@ public interface ChirpFitFunction {
 	
 	
 	
-        // Defines the Microtubule fit function as a line
+        // Defines the time-series as a chirp signal
 		
 		/**
 		 * Evaluate this function at point <code>x</code>. The function is
 		 * otherwise defined over an array of parameters <code>a</code>, that
 		 * is the target of the fitting procedure.
-		 * @param x  the time point of the timee-series
+		 * @param t  the time point index of the time-series
 		 * @param a  the set of parameters that defines the function
-		 * @param b the set of parameters which are fixed
+		 * @param totaltime the totaltime of the time-series
 		 * @return  a double value, the function evaluated at <code>x</code>
 		 *  
 		 */
@@ -23,10 +23,10 @@ public interface ChirpFitFunction {
 		/**
 		 * Evaluate the gradient value of the function, taken with respect to the 
 		 * <code>ak</code><sup>th</sup> parameter, evaluated at point <code>x</code>.
-		 * @param x  the time-point to evaluate the gradient at
+		 * @param t  the time point index of the time-series
 		 * @param a  the set of parameters that defines the function
-		 *  @param b the set of parameters which are fixed
-		 * @param ak the index of the parameter to compute the gradient 
+		 *  @param totaltime the totaltime of the time-series
+		 * @param k the index of the parameter to compute the gradient 
 		 * @return the kth component of the gradient <code>df(x,a)/da_k</code>
 		 * @see #val(double[], double[])
 		 */
