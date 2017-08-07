@@ -2,90 +2,67 @@ package chirpModels;
 
 public class LinearChirp implements ChirpFitFunction {
 
-	public double val(double[] x, double[] a, double[] b) {
-		
-		final int totaltime = x.length;
-		double Sinusoid = 0;
-		for (int i = 0; i < x.length; i++) {
-			
-			Sinusoid += a[i] * Math.cos(a[totaltime] * x[i] + a[totaltime + 1] *x[i] * x[i] / 2 + a[totaltime + 2]);
-			
-		}
-		
-		
+	public double val(int t, double[] a, int totaltime) {
+
+		double Sinusoid = a[t] * Math.cos(
+				a[totaltime] * t + (a[totaltime + 1] - a[totaltime + 2]) * t * t / (2 * totaltime) + a[totaltime + 3]);
+
 		return Sinusoid;
 	}
 
-	
-	/*Gradient function
+	/*
+	 * Gradient function
 	 * 
 	 */
-	public double grad(double[] x, double[] a, double[] b, int k) {
-		final int totaltime = x.length;
-		
-		if (k < totaltime){
-			
-			
-			
-			double Sinusoid = 0;
-			for (int i = 0; i < x.length; i++) {
-				
-				Sinusoid += Math.cos(a[totaltime] * x[i] + a[totaltime + 1] *x[i] * x[i] / 2 + a[totaltime + 2]);
-				
-			}
-			
-			return  Sinusoid;
-			
+	public double grad(int t, double[] a, int totaltime, int k) {
+
+		if (k < totaltime) {
+
+			double Sinusoid = Math.cos(a[totaltime] * t
+					+ (a[totaltime + 1] - a[totaltime + 2]) * t * t / (2 * totaltime) + a[totaltime + 3]);
+
+			return Sinusoid;
+
 		}
-		
-		else if (k == totaltime ){
-			
-			double Sinusoid = 0;
-			for (int i = 0; i < x.length; i++) {
-				
-				Sinusoid += -a[i] * Math.sin(a[totaltime] * x[i] + a[totaltime + 1] *x[i] * x[i] / 2 + a[totaltime + 2]) * x[i] * x[i] / 2;
-				
-			}
-			
-			return  Sinusoid;
-					
-					
+
+		else if (k == totaltime) {
+
+			double Sinusoid = -a[t] * Math.sin(a[totaltime] * t
+					+ (a[totaltime + 1] - a[totaltime + 2]) * t * t / (2 * totaltime) + a[totaltime + 3]) * t * t
+					/ (2 * totaltime);
+
+			return Sinusoid;
+
 		}
-		
-		else if (k == totaltime + 1){
-			
-			double Sinusoid = 0;
-			for (int i = 0; i < x.length; i++) {
-				
-				Sinusoid += -a[i] * Math.sin(a[totaltime] * x[i] + a[totaltime + 1] *x[i] * x[i] / 2 + a[totaltime + 2]);
-				
-			}
-			
-			return  Sinusoid;
-			
-			
-			
-			
+
+		else if (k == totaltime + 1) {
+
+			double Sinusoid = -a[t] * Math.sin(a[totaltime] * t
+					+ (a[totaltime + 1] - a[totaltime + 2]) * t * t / (2 * totaltime) + a[totaltime + 3]) * t * t
+					/ (2 * totaltime);
+
+			return Sinusoid;
+
 		}
-		
-     else {
-			
-			double Sinusoid = 0;
-			for (int i = 0; i < x.length; i++) {
-				
-				Sinusoid += -a[i] * Math.sin(a[totaltime] * x[i] + a[totaltime + 1] *x[i] * x[i] / 2 + a[totaltime + 2]) * x[i];
-				
-			}
-			
-			return  Sinusoid;
-			
-			
-			
-			
+
+		else if (k == totaltime + 2) {
+
+			double Sinusoid = a[t] * Math.sin(a[totaltime] * t
+					+ (a[totaltime + 1] - a[totaltime + 2]) * t * t / (2 * totaltime) + a[totaltime + 3]);
+
+			return Sinusoid;
+
 		}
-		
-		
-	
+
+		else {
+
+			double Sinusoid = -a[t] * Math.sin(a[totaltime] * t
+					+ (a[totaltime + 1] - a[totaltime + 2]) * t * t / (2 * totaltime) + a[totaltime + 3]) * t;
+
+			return Sinusoid;
+
+		}
+
 	}
 
 }

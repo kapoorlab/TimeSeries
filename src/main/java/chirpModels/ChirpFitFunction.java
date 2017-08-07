@@ -17,7 +17,7 @@ public interface ChirpFitFunction {
 		 * @return  a double value, the function evaluated at <code>x</code>
 		 *  
 		 */
-		public double val(double[] x, double[] a, double [] b);
+		public double val(int t, double[] a, int totaltime);
 		
 
 		/**
@@ -30,7 +30,7 @@ public interface ChirpFitFunction {
 		 * @return the kth component of the gradient <code>df(x,a)/da_k</code>
 		 * @see #val(double[], double[])
 		 */
-		public double grad(double[] x, double[] a, double[] b, int ak);
+		public double grad(int t, double[] a, int totaltime, int k);
 	}
 
 	
