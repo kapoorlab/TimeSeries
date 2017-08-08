@@ -12,7 +12,7 @@ import net.imglib2.util.ValuePair;
 public class ExtractSeries {
 
 	
-	public static ArrayList< Pair< Double, Double > > loadMT( final File file )
+	public static ArrayList< Pair< Double, Double > > gatherdata( final File file )
 	{
 		final ArrayList< Pair< Double, Double > > points = new ArrayList< Pair< Double, Double > >();
 
@@ -56,7 +56,13 @@ public class ExtractSeries {
 		return points;
 	}
 
-	
+	public static double[] initialguess(final int totaltime){
+		
+		double[] initialparameters = new double[totaltime + 4];
+		
+		
+		return initialparameters;
+	}
 	
 	
 }

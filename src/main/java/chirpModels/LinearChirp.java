@@ -2,9 +2,9 @@ package chirpModels;
 
 public class LinearChirp implements ChirpFitFunction {
 
-	public double val(int t, double[] a, int totaltime) {
+	public double val(double t, double[] a, int totaltime, int timeindex) {
 
-		double Sinusoid = a[t] * Math.cos(
+		double Sinusoid = a[timeindex] * Math.cos(
 				a[totaltime] * t + (a[totaltime + 1] - a[totaltime + 2]) * t * t / (2 * totaltime) + a[totaltime + 3]);
 
 		return Sinusoid;
@@ -14,7 +14,7 @@ public class LinearChirp implements ChirpFitFunction {
 	 * Gradient function
 	 * 
 	 */
-	public double grad(int t, double[] a, int totaltime, int k) {
+	public double grad(double t, double[] a, int totaltime, int k, int timeindex) {
 
 		if (k < totaltime) {
 
@@ -27,7 +27,7 @@ public class LinearChirp implements ChirpFitFunction {
 
 		else if (k == totaltime) {
 
-			double Sinusoid = -a[t] * Math.sin(a[totaltime] * t
+			double Sinusoid = -a[timeindex] * Math.sin(a[totaltime] * t
 					+ (a[totaltime + 1] - a[totaltime + 2]) * t * t / (2 * totaltime) + a[totaltime + 3]) * t * t
 					/ (2 * totaltime);
 
@@ -37,7 +37,7 @@ public class LinearChirp implements ChirpFitFunction {
 
 		else if (k == totaltime + 1) {
 
-			double Sinusoid = -a[t] * Math.sin(a[totaltime] * t
+			double Sinusoid = -a[timeindex] * Math.sin(a[totaltime] * t
 					+ (a[totaltime + 1] - a[totaltime + 2]) * t * t / (2 * totaltime) + a[totaltime + 3]) * t * t
 					/ (2 * totaltime);
 
@@ -47,7 +47,7 @@ public class LinearChirp implements ChirpFitFunction {
 
 		else if (k == totaltime + 2) {
 
-			double Sinusoid = a[t] * Math.sin(a[totaltime] * t
+			double Sinusoid = a[timeindex] * Math.sin(a[totaltime] * t
 					+ (a[totaltime + 1] - a[totaltime + 2]) * t * t / (2 * totaltime) + a[totaltime + 3]);
 
 			return Sinusoid;
@@ -56,7 +56,7 @@ public class LinearChirp implements ChirpFitFunction {
 
 		else {
 
-			double Sinusoid = -a[t] * Math.sin(a[totaltime] * t
+			double Sinusoid = -a[timeindex] * Math.sin(a[totaltime] * t
 					+ (a[totaltime + 1] - a[totaltime + 2]) * t * t / (2 * totaltime) + a[totaltime + 3]) * t;
 
 			return Sinusoid;
