@@ -16,7 +16,7 @@ public class FunctionFitter extends BenchmarkAlgorithm implements OutputAlgorith
 	private final UserChirpModel model;
 	public int maxiter = 500;
 	public double lambda = 1e-3;
-	public double termepsilon = 1e-1;
+	public double termepsilon = 1e-2;
 	// Mask fits iteration param
 	double[] LMparam;
 	
@@ -90,19 +90,27 @@ public class FunctionFitter extends BenchmarkAlgorithm implements OutputAlgorith
 			UserChoiceFunction = new LinearChirp();
 			
 		}
-		for (int i = 0; i < LMparam.length; ++i){
-		System.out.println("Initial parameters:" + LMparam[i]);
-		}
+		
 		try {
-			LevenbergMarquardtSolverChirp.solve(T, I, LMparam, timeseries.size(), I, UserChoiceFunction, lambda,
+			LevenbergMarquardtSolverChirp.solve(T, LMparam, timeseries.size(), I, UserChoiceFunction, lambda,
 					termepsilon, maxiter);
 		} catch (Exception e1) {
 			e1.printStackTrace();
 		}
 		
-		for (int i = 0; i < LMparam.length; ++i){
-			System.out.println("Fit parameters:" + LMparam[i]);
-			}
+	
+			System.out.println("Frequency (hrs):" + 6.28/((LMparam[timeseries.size()]) * 60));
+			System.out.println("Chirp Frequ start (hrs):" + 6.28/((LMparam[timeseries.size() + 2]) * 60));
+			System.out.println("Chirp Frequ end (hrs):" + 6.28/((LMparam[timeseries.size() + 2]) * 60));
+			System.out.println("Phase:" + ((LMparam[timeseries.size()+3])));
+			System.out.println("Back:" + ((LMparam[timeseries.size()+4])));
+
+
+			System.out.println("Frequency :" + LMparam[timeseries.size()]);
+			System.out.println("Chirp Frequ start :" + LMparam[timeseries.size() + 1]);
+			System.out.println("Chirp Frequ end :" + LMparam[timeseries.size() + 2]);
+			System.out.println("Phase:" + ((LMparam[timeseries.size()+3])));
+			System.out.println("Back:" + ((LMparam[timeseries.size()+4])));
 		
 		
 		return false;

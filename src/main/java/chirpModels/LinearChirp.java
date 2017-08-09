@@ -2,10 +2,11 @@ package chirpModels;
 
 public class LinearChirp implements ChirpFitFunction {
 
-	public double val(double t,double[] I, double[] a, int totaltime, int timeindex) {
+	public double val(double t, double[] a, int totaltime, int timeindex) {
 
-		double Sinusoid = I[timeindex] * Math.cos(
-				a[0] * t + (a[1] - a[2]) * t * t / (2 * totaltime) + a[3]) + a[4];
+		double Sinusoid = a[timeindex] * Math.cos(Math.toRadians(
+				a[totaltime] * t + (a[totaltime + 1] - a[totaltime + 2]) * t * t / (2 * totaltime)
+				+ a[totaltime + 3]) + a[totaltime + 4]);
 		
 		return Sinusoid;
 	}
@@ -14,49 +15,56 @@ public class LinearChirp implements ChirpFitFunction {
 	 * Gradient function
 	 * 
 	 */
-	public double grad(double t, double[] I, double[] a, int totaltime, int k, int timeindex) {
+	public double grad(double t, double[] a, int totaltime, int k, int timeindex) {
+
+		if (k < totaltime) {
 
 		
+			double Sinusoid = Math.cos(Math.toRadians(a[totaltime] * t
+					+ (a[totaltime + 1] - a[totaltime + 2]) * t * t / (2 * totaltime) + a[totaltime + 3]));
+			return Sinusoid;
 
-		if (k == 0) {
+		}
 
-			double Sinusoid = -I[timeindex] * Math.sin(a[0] * t
-					+ (a[1] - a[2]) * t * t / (2 * totaltime) + a[3]) * t;
+		else if (k == totaltime) {
+
+			double Sinusoid = -a[timeindex] * Math.sin(Math.toRadians(a[totaltime] * t
+					+ (a[totaltime + 1] - a[totaltime + 2]) * t * t / (2 * totaltime) + a[totaltime + 3])) * t;
 
 			return Sinusoid;
 
 		}
 
-		else if (k ==  1) {
+		else if (k == totaltime + 1) {
 
-			double Sinusoid = -I[timeindex] * Math.sin(a[0] * t
-					+ (a[1] - a[2]) * t * t / (2 * totaltime) + a[3]) * t * t
+			double Sinusoid = -a[timeindex] * Math.sin(Math.toRadians(a[totaltime] * t
+					+ (a[totaltime + 1] - a[totaltime + 2]) * t * t / (2 * totaltime) + a[totaltime + 3])) * t * t
 					/ (2 * totaltime);
 
 			return Sinusoid;
 
 		}
 
-		else if (k ==  2) {
+		else if (k == totaltime + 2) {
 
-			double Sinusoid = I[timeindex] * Math.sin(a[0] * t
-					+ (a[1] - a[2]) * t * t / (2 * totaltime) + a[3])* t * t
+			double Sinusoid = a[timeindex] * Math.sin(Math.toRadians(a[totaltime] * t
+					+ (a[totaltime + 1] - a[totaltime + 2]) * t * t / (2 * totaltime) + a[totaltime + 3]))* t * t
 					/ (2 * totaltime);
 
 			return Sinusoid;
 
 		}
 
-		else if (k == 3) {
+		else if (k == totaltime + 3) {
 
-			double Sinusoid = -I[timeindex] * Math.sin(a[0] * t
-					+ (a[1] - a[2]) * t * t / (2 * totaltime) + a[3]) ;
+			double Sinusoid = -a[timeindex] * Math.sin(Math.toRadians(a[totaltime] * t
+					+ (a[totaltime + 1] - a[totaltime + 2]) * t * t / (2 * totaltime) + a[totaltime + 3])) ;
 
 			return Sinusoid;
 
 		}
 		
-		else if (k == 4){
+		else if (k == totaltime + 4){
 			
 			return 1;
 		}
