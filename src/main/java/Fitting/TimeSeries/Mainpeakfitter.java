@@ -17,8 +17,10 @@ import org.jfree.chart.JFreeChart;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.chart.plot.XYPlot;
 import org.jfree.chart.renderer.xy.XYItemRenderer;
+import org.jfree.chart.renderer.xy.XYLineAndShapeRenderer;
 import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
+import org.jfree.util.ShapeUtilities;
 
 import chirpModels.UserChirpModel;
 import net.imglib2.util.Pair;
@@ -30,7 +32,7 @@ public class Mainpeakfitter {
 	
 	public static void main(String[] args){
 		
-		final ArrayList< Pair< Double, Double > > untimeseries = ExtractSeries.gatherdata(new File("/Users/varunkapoor/Documents/Ines_Fourier/FFT_Varun_Exp1All/Exp1_cell25.txt"));
+		final ArrayList< Pair< Double, Double > > untimeseries = ExtractSeries.gatherdata(new File("/Users/varunkapoor/Documents/Ines_Fourier/FFT_Varun_Exp1All/Exp1_cell5.txt"));
 		
 		final ArrayList< Pair< Double, Double > > timeseries = ExtractSeries.Normalize(untimeseries);
 		
@@ -38,10 +40,10 @@ public class Mainpeakfitter {
 		
 		int totaltime = timeseries.size();
 		
-		dataset.addSeries( drawPoints( timeseries ) );
+		
 		final JFreeChart chart = makeChart( dataset );
 
-		
+		setStroke( chart, 0, 2f );
 	
 		
 		FunctionFitter chirp = new FunctionFitter(timeseries, UserChirpModel.Linear);
@@ -55,22 +57,36 @@ public class Mainpeakfitter {
 			
 			Double time = timeseries.get(i).getA();
 			
-			poly = fitparams[i] * Math.cos(
-					fitparams[totaltime] * time + (fitparams[totaltime + 1] - fitparams[totaltime + 2]) * time * time / (2 * totaltime) + fitparams[totaltime + 3]) + fitparams[totaltime + 4];
+			poly = timeseries.get(i).getB()* Math.cos(
+					fitparams[0] * time + (fitparams[ 1] - fitparams[2]) * time * time / (2 * totaltime) + fitparams[3]) + fitparams[4];
 			
 			fitpoly.add(new ValuePair<Double, Double> (time, poly));
 		}
 		
-		
+		dataset.addSeries( drawPoints( timeseries ) );
 		dataset.addSeries(drawPoints(fitpoly, "Fits"));
 		
 		setColor( chart, 0, new Color( 64, 64, 64 ) );
-		setStroke( chart, 0, 1f );
-		
-		
-		display( chart, new Dimension( 500, 400 ) );
+		setColor( chart, 1, new Color( 255, 255, 64 ) );
+		setStroke( chart, 1, 2f );
+		setDisplayType(chart, 1, false, true);
+		setSmallUpTriangleShape( chart, 1 );
+		display( chart, new Dimension( 800, 400 ) );
 	}
 	
+	public static void setDisplayType( final JFreeChart chart, final int seriesIndex, final boolean line, final boolean shape )
+	{
+		final XYPlot plot = chart.getXYPlot();
+		final XYLineAndShapeRenderer renderer = (XYLineAndShapeRenderer)plot.getRenderer();
+		renderer.setSeriesLinesVisible( seriesIndex, line );
+		renderer.setSeriesShapesVisible( seriesIndex, shape );
+	}
+	public static void setSmallUpTriangleShape( final JFreeChart chart, final int seriesIndex )
+	{
+		final XYPlot plot = chart.getXYPlot();
+		final XYItemRenderer renderer = plot.getRenderer();
+		renderer.setSeriesShape( seriesIndex, ShapeUtilities.createUpTriangle( 5f ) );
+	}
 	public static XYSeries drawPoints( final List< Pair< Double, Double > > timeseries ) { return drawPoints( timeseries, "Intensity vs Time" ); }
 	public static XYSeries drawPoints( final List< Pair< Double, Double > > timeseries, final String name )
 	{

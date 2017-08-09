@@ -13,6 +13,7 @@ public class LevenbergMarquardtSolverChirp {
 	 */
 	public static final double chiSquared(
 			final double[] x, 
+			final double[] I,
 			final double[] a, 
 			final int totaltime,
 			final double[] y, 
@@ -22,7 +23,7 @@ public class LevenbergMarquardtSolverChirp {
 		double sum = 0.;
 
 		for( int i = 0; i < npts; i++ ) {
-			double d = y[i] - f.val(x[i], a, totaltime, i);
+			double d = y[i] - f.val(x[i],I, a, totaltime, i);
 			sum = sum + (d*d);
 		}
 
@@ -46,6 +47,7 @@ public class LevenbergMarquardtSolverChirp {
 	 */
 	public static final int solve(
 			double[] x, 
+			double[] I,
 			double[] a,
 			int totaltime,
 			double[] y, 
@@ -57,7 +59,7 @@ public class LevenbergMarquardtSolverChirp {
 		int nparm = a.length;
 	
 		
-		double e0 = chiSquared(x, a, totaltime, y, f);
+		double e0 = chiSquared(x, I, a, totaltime, y, f);
 		
 		//System.out.println(e0);
 		boolean done = false;
@@ -79,7 +81,7 @@ public class LevenbergMarquardtSolverChirp {
 					for( int i = 0; i < npts; i++ ) {
 						double xi = x[i];
 						
-						H[r][c] += f.grad(xi, a, totaltime, r , i) * f.grad(xi, a, totaltime, c , i);
+						H[r][c] += f.grad(xi, I, a, totaltime, r , i) * f.grad(xi, I, a, totaltime, c , i);
 					}  //npts
 				} //c
 			} //r
@@ -93,7 +95,7 @@ public class LevenbergMarquardtSolverChirp {
 				g[r] = 0.;
 				for( int i = 0; i < npts; i++ ) {
 					double xi = x[i];
-					g[r] += (y[i]-f.val(xi,a, totaltime, i)) * f.grad(xi, a, totaltime, r, i);
+					g[r] += (y[i]-f.val(xi,I,a, totaltime, i)) * f.grad(xi, I, a, totaltime, r, i);
 				
 				}
 				
@@ -113,7 +115,7 @@ public class LevenbergMarquardtSolverChirp {
 				continue;
 			}
 			double[] na = (new Matrix(a, nparm)).plus(new Matrix(d, nparm)).getRowPackedCopy();
-			double e1 = chiSquared(x, na, totaltime, y, f);
+			double e1 = chiSquared(x, I, na, totaltime, y, f);
 			System.out.println(iter+ " " + lambda+ " "+ Math.abs(e1-e0));
 			// termination test (slightly different than NR)
 			if (Math.abs(e1-e0) > termepsilon) {
@@ -122,7 +124,7 @@ public class LevenbergMarquardtSolverChirp {
 			else {
 				
 				term++;
-				if (term == 3)
+				if (term == 4)
 					done = true;
 				
 			}
@@ -151,12 +153,17 @@ public class LevenbergMarquardtSolverChirp {
 				}
 			}
 			
-			// New truncation criteria to fasten the solver when it moves slowly during an iteration step @Varun
-		
+			for( int i = 0; i < nparm; i++ ) {
+				if (Math.abs(a[i] - na[i]) < 1.0E-10   ){
+					lambda *= 2;
+				break;
+				
+				}
+			}
 			
 			if (IJ.escapePressed()) 
-				break;
-			
+				done = true;
+		
 
 		} while(!done);
 	//	bw.close();

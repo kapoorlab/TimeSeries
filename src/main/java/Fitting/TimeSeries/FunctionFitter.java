@@ -14,7 +14,7 @@ public class FunctionFitter extends BenchmarkAlgorithm implements OutputAlgorith
 	final ArrayList<Pair<Double, Double>> timeseries;
 	final double deltat;
 	private final UserChirpModel model;
-	public int maxiter = 2000;
+	public int maxiter = 500;
 	public double lambda = 1e-3;
 	public double termepsilon = 1e-1;
 	// Mask fits iteration param
@@ -94,7 +94,7 @@ public class FunctionFitter extends BenchmarkAlgorithm implements OutputAlgorith
 		System.out.println("Initial parameters:" + LMparam[i]);
 		}
 		try {
-			LevenbergMarquardtSolverChirp.solve(T, LMparam, timeseries.size(), I, UserChoiceFunction, lambda,
+			LevenbergMarquardtSolverChirp.solve(T, I, LMparam, timeseries.size(), I, UserChoiceFunction, lambda,
 					termepsilon, maxiter);
 		} catch (Exception e1) {
 			e1.printStackTrace();
