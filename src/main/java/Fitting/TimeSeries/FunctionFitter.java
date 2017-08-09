@@ -14,11 +14,10 @@ public class FunctionFitter extends BenchmarkAlgorithm implements OutputAlgorith
 	final ArrayList<Pair<Double, Double>> timeseries;
 	final double deltat;
 	private final UserChirpModel model;
-	public int maxiter = 200;
-	public double lambda = 1e-2;
-	public double termepsilon = 1e-3;
+	public int maxiter = 2000;
+	public double lambda = 1e-3;
+	public double termepsilon = 1e-1;
 	// Mask fits iteration param
-	public int iterations = 200;
 	double[] LMparam;
 	
 	public void setMaxiter(int maxiter) {
@@ -75,7 +74,15 @@ public class FunctionFitter extends BenchmarkAlgorithm implements OutputAlgorith
 		double[] T = new double[timeseries.size()];
 		double[] I = new double[timeseries.size()];
 		
-		LMparam = ExtractSeries.initialguess(timeseries.size());
+		
+		for (int i = 0; i < timeseries.size(); ++i){
+			
+			T[i] = timeseries.get(i).getA();
+			I[i] = timeseries.get(i).getB(); 
+		}
+		
+	
+		LMparam = ExtractSeries.initialguess(timeseries, timeseries.size());
 		
 		ChirpFitFunction UserChoiceFunction = null;
 		if (model == UserChirpModel.Linear){
@@ -83,7 +90,9 @@ public class FunctionFitter extends BenchmarkAlgorithm implements OutputAlgorith
 			UserChoiceFunction = new LinearChirp();
 			
 		}
-		
+		for (int i = 0; i < LMparam.length; ++i){
+		System.out.println("Initial parameters:" + LMparam[i]);
+		}
 		try {
 			LevenbergMarquardtSolverChirp.solve(T, LMparam, timeseries.size(), I, UserChoiceFunction, lambda,
 					termepsilon, maxiter);
@@ -91,7 +100,9 @@ public class FunctionFitter extends BenchmarkAlgorithm implements OutputAlgorith
 			e1.printStackTrace();
 		}
 		
-		
+		for (int i = 0; i < LMparam.length; ++i){
+			System.out.println("Fit parameters:" + LMparam[i]);
+			}
 		
 		
 		return false;

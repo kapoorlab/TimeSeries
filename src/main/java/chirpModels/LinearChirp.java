@@ -5,8 +5,8 @@ public class LinearChirp implements ChirpFitFunction {
 	public double val(double t, double[] a, int totaltime, int timeindex) {
 
 		double Sinusoid = a[timeindex] * Math.cos(
-				a[totaltime] * t + (a[totaltime + 1] - a[totaltime + 2]) * t * t / (2 * totaltime) + a[totaltime + 3]);
-
+				a[totaltime] * t + (a[totaltime + 1] - a[totaltime + 2]) * t * t / (2 * totaltime) + a[totaltime + 3]) + a[totaltime + 4];
+		
 		return Sinusoid;
 	}
 
@@ -20,7 +20,6 @@ public class LinearChirp implements ChirpFitFunction {
 
 			double Sinusoid = Math.cos(a[totaltime] * t
 					+ (a[totaltime + 1] - a[totaltime + 2]) * t * t / (2 * totaltime) + a[totaltime + 3]);
-
 			return Sinusoid;
 
 		}
@@ -28,8 +27,7 @@ public class LinearChirp implements ChirpFitFunction {
 		else if (k == totaltime) {
 
 			double Sinusoid = -a[timeindex] * Math.sin(a[totaltime] * t
-					+ (a[totaltime + 1] - a[totaltime + 2]) * t * t / (2 * totaltime) + a[totaltime + 3]) * t * t
-					/ (2 * totaltime);
+					+ (a[totaltime + 1] - a[totaltime + 2]) * t * t / (2 * totaltime) + a[totaltime + 3]) * t;
 
 			return Sinusoid;
 
@@ -48,21 +46,29 @@ public class LinearChirp implements ChirpFitFunction {
 		else if (k == totaltime + 2) {
 
 			double Sinusoid = a[timeindex] * Math.sin(a[totaltime] * t
-					+ (a[totaltime + 1] - a[totaltime + 2]) * t * t / (2 * totaltime) + a[totaltime + 3]);
+					+ (a[totaltime + 1] - a[totaltime + 2]) * t * t / (2 * totaltime) + a[totaltime + 3])* t * t
+					/ (2 * totaltime);
 
 			return Sinusoid;
 
 		}
 
-		else {
+		else if (k == totaltime + 3) {
 
 			double Sinusoid = -a[timeindex] * Math.sin(a[totaltime] * t
-					+ (a[totaltime + 1] - a[totaltime + 2]) * t * t / (2 * totaltime) + a[totaltime + 3]) * t;
+					+ (a[totaltime + 1] - a[totaltime + 2]) * t * t / (2 * totaltime) + a[totaltime + 3]) ;
 
 			return Sinusoid;
 
 		}
-
+		
+		else if (k == totaltime + 4){
+			
+			return 1;
+		}
+		
+		
+		else return 0;
 	}
 
 }

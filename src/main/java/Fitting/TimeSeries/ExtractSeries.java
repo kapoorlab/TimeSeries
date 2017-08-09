@@ -5,6 +5,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Random;
 
 import net.imglib2.util.Pair;
 import net.imglib2.util.ValuePair;
@@ -55,11 +56,75 @@ public class ExtractSeries {
 
 		return points;
 	}
+	
+	
+	public static ArrayList< Pair< Double, Double > > Normalize (ArrayList< Pair< Double, Double > > points){
+		
+		
+		Pair<Double, Double> minmax = minmax(points);
+		final ArrayList< Pair< Double, Double > > Normpoints = new ArrayList< Pair< Double, Double > >();
 
-	public static double[] initialguess(final int totaltime){
 		
-		double[] initialparameters = new double[totaltime + 4];
 		
+		for (final Pair< Double, Double > p : points){
+			
+			Normpoints.add(new ValuePair<Double, Double>(p.getA(), p.getB() / (minmax.getB() - minmax.getA())));
+			
+		}
+		
+		return Normpoints;
+	}
+	
+	public static Pair<Double, Double> minmax (ArrayList< Pair< Double, Double > > points){
+		
+		double min = Double.MAX_VALUE;
+		double max = Double.MIN_VALUE;
+		
+		
+		for (final Pair< Double, Double > p : points){
+			
+			min = Math.min(min, p.getB());
+			max = Math.max(max, p.getB());
+		}
+		
+		Pair<Double, Double> minmax = new ValuePair<Double,Double>(min, max);
+		
+		return minmax;
+	}
+
+	public static double[] initialguess(ArrayList< Pair< Double, Double > > points, final int totaltime){
+		
+		double[] initialparameters = new double[totaltime + 5];
+		
+		
+		
+		
+		double Frequency = 0.01;
+		double startChirp = 0.005;
+		double endChirp = 0.02;
+		double phase = 0;
+		
+		double min = Double.MAX_VALUE;
+		double max = Double.MIN_VALUE;
+		
+		System.out.println(totaltime);
+		
+		for (final Pair< Double, Double > p : points){
+			
+			min = Math.min(min, p.getB());
+			max = Math.max(max, p.getB());
+		}
+		
+		
+			
+			for (int i = 0; i < totaltime; ++i)
+	    initialparameters[i] = ( max - min)/ 2;
+		
+		initialparameters[totaltime] = Frequency;
+		initialparameters[totaltime + 1] = startChirp;
+		initialparameters[totaltime + 2] = endChirp;
+		initialparameters[totaltime + 3] = phase;
+		initialparameters[totaltime + 4] = (max + min)/ 2;
 		
 		return initialparameters;
 	}

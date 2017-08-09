@@ -58,6 +58,8 @@ public class LevenbergMarquardtSolverChirp {
 	
 		
 		double e0 = chiSquared(x, a, totaltime, y, f);
+		
+		//System.out.println(e0);
 		boolean done = false;
 
 		// g = gradient, H = hessian, d = step to minimum
@@ -76,11 +78,12 @@ public class LevenbergMarquardtSolverChirp {
 					H[r][c] = 0.;
 					for( int i = 0; i < npts; i++ ) {
 						double xi = x[i];
+						
 						H[r][c] += f.grad(xi, a, totaltime, r , i) * f.grad(xi, a, totaltime, c , i);
 					}  //npts
 				} //c
 			} //r
-
+			
 			// boost diagonal towards gradient descent
 			for( int r = 0; r < nparm; r++ )
 				H[r][r] *= (1.0 + lambda);
@@ -91,23 +94,27 @@ public class LevenbergMarquardtSolverChirp {
 				for( int i = 0; i < npts; i++ ) {
 					double xi = x[i];
 					g[r] += (y[i]-f.val(xi,a, totaltime, i)) * f.grad(xi, a, totaltime, r, i);
+				
 				}
 				
 			} //npts
 		
+
 			// solve H d = -g, evaluate error at new location
 			//double[] d = DoubleMatrix.solve(H, g);
 			double[] d = null;
 			try {
 				d = (new Matrix(H)).lu().solve(new Matrix(g, nparm)).getRowPackedCopy();
+				
+				
 			} catch (RuntimeException re) {
 				// Matrix is singular
-				//lambda *= 10.;
+			//	lambda *= 10.;
 				continue;
 			}
 			double[] na = (new Matrix(a, nparm)).plus(new Matrix(d, nparm)).getRowPackedCopy();
 			double e1 = chiSquared(x, na, totaltime, y, f);
-
+			System.out.println(iter+ " " + lambda+ " "+ Math.abs(e1-e0));
 			// termination test (slightly different than NR)
 			if (Math.abs(e1-e0) > termepsilon) {
 				term = 0;
@@ -119,12 +126,13 @@ public class LevenbergMarquardtSolverChirp {
 					done = true;
 				
 			}
+		
 			if (iter > maxiter -1)
 			System.out.println("LM solver unable to find extrema after" + iter + " iterations");
 			if (iter >= maxiter) done = true;
 
 
-			System.out.println(iter+ " " + lambda+ " "+ Math.abs(e1-e0));
+			
 			// in the C++ version, found that changing this to e1 >= e0
 			// was not a good idea.  See comment there.
 			//
@@ -144,13 +152,7 @@ public class LevenbergMarquardtSolverChirp {
 			}
 			
 			// New truncation criteria to fasten the solver when it moves slowly during an iteration step @Varun
-			for( int i = 0; i < nparm; i++ ) {
-				if (Math.abs(a[i] - na[i]) < 1.0E-10   )
-					lambda *= 50;
-			}
-			
-			if (lambda >= 1.0E50)
-				done = true;
+		
 			
 			if (IJ.escapePressed()) 
 				break;
