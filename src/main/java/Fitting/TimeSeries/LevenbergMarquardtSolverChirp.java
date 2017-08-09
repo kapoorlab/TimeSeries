@@ -118,7 +118,7 @@ public class LevenbergMarquardtSolverChirp {
 			double e1 = chiSquared(x, na, totaltime, y, f);
 			System.out.println(iter+ " " + lambda+ " "+ Math.abs(e1-e0));
 			// termination test (slightly different than NR)
-			if (Math.abs((e1-e0)/e0) > termepsilon) {
+			if (Math.abs(e1-e0) > termepsilon) {
 				term = 0;
 			}
 			else {
@@ -154,7 +154,13 @@ public class LevenbergMarquardtSolverChirp {
 				}
 			}
 			
-			
+			for( int i = 0; i < nparm; i++ ) {
+				if (Math.abs(a[i] - na[i]) < 1.0E-10   ){
+					lambda *= 2;
+				break;
+				
+				}
+			}
 			
 			if (IJ.escapePressed()) 
 				done = true;

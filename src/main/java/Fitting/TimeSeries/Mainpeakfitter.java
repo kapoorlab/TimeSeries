@@ -55,11 +55,10 @@ public class Mainpeakfitter {
 			Double time = timeseries.get(i).getA();
 
 			poly = fitparams[i]
-					* Math.cos(Math.toRadians(fitparams[timeseries.size()] * time
-							+ (fitparams[timeseries.size() + 1] - fitparams[timeseries.size() + 2]) * time * time
+					* Math.cos(Math.toRadians(fitparams[totaltime] * time
+							+ (fitparams[totaltime + 1] -fitparams[totaltime]) * time * time
 									/ (2 * totaltime)
-							+ fitparams[timeseries.size() + 3]));
-
+							+ fitparams[totaltime + 2])) + fitparams[totaltime + 3] ;
 			fitpoly.add(new ValuePair<Double, Double>(time, poly));
 		}
 

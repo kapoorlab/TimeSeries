@@ -94,15 +94,14 @@ public class ExtractSeries {
 
 	public static double[] initialguess(ArrayList< Pair< Double, Double > > points, final int totaltime){
 		
-		double[] initialparameters = new double[totaltime + 5];
+		double[] initialparameters = new double[totaltime + 4];
 		
 		
 		
 		
 		double Frequency = 0.02;
-		double expectedsigma = 0.01*Frequency;
-		double startChirp = Frequency - expectedsigma/2;
-		double endChirp = Frequency + expectedsigma/2;
+		double endChirp =  0.03 ;
+		
 		double phase = 0;
 		
 		double min = Double.MAX_VALUE;
@@ -122,10 +121,9 @@ public class ExtractSeries {
 			initialparameters[index] = points.get(index).getB();
 		}
 		initialparameters[totaltime] = Frequency;
-		initialparameters[totaltime + 1] = startChirp;
-		initialparameters[totaltime + 2] = endChirp;
-		initialparameters[totaltime + 3] = phase;
-		initialparameters[totaltime + 4] = 0;
+		initialparameters[totaltime + 1] = endChirp;
+		initialparameters[totaltime + 2] = phase;
+		initialparameters[totaltime + 3] = min;
 		
 		return initialparameters;
 	}

@@ -14,9 +14,9 @@ public class FunctionFitter extends BenchmarkAlgorithm implements OutputAlgorith
 	final ArrayList<Pair<Double, Double>> timeseries;
 	final double deltat;
 	private final UserChirpModel model;
-	public int maxiter = 500;
+	public int maxiter = 1500;
 	public double lambda = 1e-3;
-	public double termepsilon = 1e-2;
+	public double termepsilon = 1e-3;
 	// Mask fits iteration param
 	double[] LMparam;
 	
@@ -98,19 +98,18 @@ public class FunctionFitter extends BenchmarkAlgorithm implements OutputAlgorith
 			e1.printStackTrace();
 		}
 		
+		int totaltime = timeseries.size();
 	
-			System.out.println("Frequency (hrs):" + 6.28/((LMparam[timeseries.size()]) * 60));
-			System.out.println("Chirp Frequ start (hrs):" + 6.28/((LMparam[timeseries.size() + 2]) * 60));
-			System.out.println("Chirp Frequ end (hrs):" + 6.28/((LMparam[timeseries.size() + 2]) * 60));
-			System.out.println("Phase:" + ((LMparam[timeseries.size()+3])));
-			System.out.println("Back:" + ((LMparam[timeseries.size()+4])));
+			System.out.println("Frequency (hrs):" + 6.28/((LMparam[totaltime]) * 60));
+			System.out.println("Chirp Frequ  (hrs):" + 6.28/((LMparam[totaltime + 1]) * 60));
+			System.out.println("Phase:" + ((LMparam[totaltime + 2])));
+			System.out.println("Back:" + ((LMparam[totaltime + 3])));
 
 
-			System.out.println("Frequency :" + LMparam[timeseries.size()]);
-			System.out.println("Chirp Frequ start :" + LMparam[timeseries.size() + 1]);
-			System.out.println("Chirp Frequ end :" + LMparam[timeseries.size() + 2]);
-			System.out.println("Phase:" + ((LMparam[timeseries.size()+3])));
-			System.out.println("Back:" + ((LMparam[timeseries.size()+4])));
+			System.out.println("Frequency :" + LMparam[totaltime]);
+			System.out.println("Chirp Frequ  :" + LMparam[totaltime + 1]);
+			System.out.println("Phase:" + ((LMparam[totaltime + 2])));
+			System.out.println("Back:" + ((LMparam[totaltime + 3])));
 		
 		
 		return false;
