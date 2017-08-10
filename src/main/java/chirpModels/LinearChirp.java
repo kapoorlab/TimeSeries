@@ -37,7 +37,7 @@ public class LinearChirp implements ChirpFitFunction {
 		else if (k == totaltime + 1) {
 
 			double Sinusoid = -a[timeindex] * Math.sin(Math.toRadians(a[totaltime] * t
-					+ (a[totaltime + 1] - a[totaltime]) * t * t / 2  + a[totaltime + 2])) * t * t
+					+ (a[totaltime + 1] - a[totaltime]) * t * t / (2 * totaltime)  + a[totaltime + 2])) * t * t
 					/ (2 * totaltime) ;
 
 			return Sinusoid;

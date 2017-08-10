@@ -1,17 +1,30 @@
 package Fitting.TimeSeries;
 
+import javax.swing.JProgressBar;
+import javax.swing.SwingWorker;
+
 import Jama.Matrix;
 import chirpModels.ChirpFitFunction;
 import ij.IJ;
 
 public class LevenbergMarquardtSolverChirp {
 
+	final InteractiveChirpFit parent;
+	final JProgressBar jpb ;
+	public LevenbergMarquardtSolverChirp(final InteractiveChirpFit parent, JProgressBar jpb){
+		
+		this.parent = parent;
+		this.jpb = jpb;
+	}
+	 double percent = 0;
 	
+	
+
 	
 	/**
 	 * Calculate the current sum-squared-error
 	 */
-	public static final double chiSquared(
+	public  final double chiSquared(
 			final double[] x, 
 			
 			final double[] a, 
@@ -45,7 +58,7 @@ public class LevenbergMarquardtSolverChirp {
 	 *
 	 * @return the number of iteration used by minimization
 	 */
-	public static final int solve(
+	public  final int solve(
 			double[] x, 
 			
 			double[] a,
@@ -85,7 +98,7 @@ public class LevenbergMarquardtSolverChirp {
 					}  //npts
 				} //c
 			} //r
-			
+			percent = (Math.round(100 * (iter + 1) / (maxiter)));
 			// boost diagonal towards gradient descent
 			for( int r = 0; r < nparm; r++ )
 				H[r][r] *= (1.0 + lambda);
@@ -102,6 +115,7 @@ public class LevenbergMarquardtSolverChirp {
 			} //npts
 		
 
+			FitterUtils.SetProgressBarTime(jpb, iter, percent);
 			// solve H d = -g, evaluate error at new location
 			//double[] d = DoubleMatrix.solve(H, g);
 			double[] d = null;
@@ -111,12 +125,17 @@ public class LevenbergMarquardtSolverChirp {
 				
 			} catch (RuntimeException re) {
 				// Matrix is singular
-			//	lambda *= 10.;
+				lambda *= 10.;
 				continue;
 			}
+			
+			
+			
+			
+			
 			double[] na = (new Matrix(a, nparm)).plus(new Matrix(d, nparm)).getRowPackedCopy();
 			double e1 = chiSquared(x, na, totaltime, y, f);
-			System.out.println(iter+ " " + lambda+ " "+ Math.abs(e1-e0));
+			//System.out.println(iter+ " " + lambda+ " "+ Math.abs(e1-e0));
 			// termination test (slightly different than NR)
 			if (Math.abs(e1-e0) > termepsilon) {
 				term = 0;

@@ -31,7 +31,7 @@ public class Mainpeakfitter {
 	public static void main(String[] args) {
 
 		final ArrayList<Pair<Double, Double>> untimeseries = ExtractSeries
-				.gatherdata(new File("/Users/varunkapoor/Documents/Ines_Fourier/FFT_Varun_Exp1All/Exp1_cell6.txt"));
+				.gatherdata(new File("/Users/varunkapoor/Documents/Ines_Fourier/FFT_Varun_Exp1All/Exp1_cell2.txt"));
 
 		final ArrayList<Pair<Double, Double>> timeseries = ExtractSeries.Normalize(untimeseries);
 
@@ -41,7 +41,7 @@ public class Mainpeakfitter {
 
 		final JFreeChart chart = makeChart(dataset);
 
-		setStroke(chart, 0, 2f);
+		/*
 
 		FunctionFitter chirp = new FunctionFitter(timeseries, UserChirpModel.Linear);
 		chirp.checkInput();
@@ -66,11 +66,13 @@ public class Mainpeakfitter {
 		dataset.addSeries(drawPoints(fitpoly, "Fits"));
 
 		setColor(chart, 0, new Color(64, 64, 64));
+		setStroke(chart, 0, 2f);
 		setColor(chart, 1, new Color(255, 255, 64));
 		setStroke(chart, 1, 2f);
 		setDisplayType(chart, 1, false, true);
 		setSmallUpTriangleShape(chart, 1);
 		display(chart, new Dimension(800, 400));
+		*/
 	}
 
 	public static void setDisplayType(final JFreeChart chart, final int seriesIndex, final boolean line,

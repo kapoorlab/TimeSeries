@@ -92,15 +92,15 @@ public class ExtractSeries {
 		return minmax;
 	}
 
-	public static double[] initialguess(ArrayList< Pair< Double, Double > > points, final int totaltime){
+	public static double[] initialguess(ArrayList< Pair< Double, Double > > points, final int totaltime, double Lowfrequency, double Highfrequency){
 		
 		double[] initialparameters = new double[totaltime + 4];
 		
 		
 		
 		
-		double Frequency = 0.02;
-		double endChirp =  0.03 ;
+		double Frequency = Lowfrequency;
+		double endChirp =  Highfrequency ;
 		
 		double phase = 0;
 		
