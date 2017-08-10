@@ -1,10 +1,19 @@
 package Fitting.TimeSeries;
 
 import java.awt.Color;
+import java.awt.Graphics2D;
+import java.awt.geom.Rectangle2D;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
 
 import javax.swing.SwingWorker;
+
+import org.jfree.chart.ChartUtilities;
+import org.jfree.chart.title.TextTitle;
+import org.jfree.chart.title.Title;
+import org.jfree.ui.RectangleEdge;
 
 import chirpModels.ChirpFitFunction;
 import chirpModels.LinearChirp;
@@ -18,7 +27,6 @@ public class FunctionFitter extends SwingWorker<Void, Void> {
 	
 	final InteractiveChirpFit parent;
 	final ArrayList<Pair<Double, Double>> timeseries;
-	final double deltat;
 	private final UserChirpModel model;
 	public int maxiter = 1500;
 	public double lambda = 1e-3;
@@ -26,7 +34,8 @@ public class FunctionFitter extends SwingWorker<Void, Void> {
 	double[] LMparam;
 	public double Lowfrequency = 0.02;
 	public double Highfrequency = 0.03;
-	
+	public final int fileindex;
+	public final int totalfiles;
 	
 	
 	
@@ -83,12 +92,14 @@ public class FunctionFitter extends SwingWorker<Void, Void> {
 	 * deltat = spacing in time between succeding points
 	 */
 	
-	public FunctionFitter(final InteractiveChirpFit parent, final ArrayList<Pair<Double, Double>> timeseries, UserChirpModel model){
+	public FunctionFitter(final InteractiveChirpFit parent, final ArrayList<Pair<Double, Double>> timeseries, UserChirpModel model, final int fileindex,
+			final int totalfiles){
 		
 		this.parent = parent;
 		this.timeseries = timeseries;
 		this.model = model;
-		this.deltat = ( timeseries.get(timeseries.size() - 1).getA() - timeseries.get(0).getA()) / (timeseries.size() - 1);
+		this.fileindex = fileindex;
+		this.totalfiles = totalfiles;
 		
 	}
 	
@@ -132,7 +143,7 @@ public class FunctionFitter extends SwingWorker<Void, Void> {
 			LevenbergMarquardtSolverChirp LMsolver = new LevenbergMarquardtSolverChirp(parent, parent.jpb);
 			
 			LMsolver.solve(T, LMparam, timeseries.size(), I, UserChoiceFunction, lambda,
-					termepsilon, maxiter);
+					termepsilon, maxiter, fileindex, totalfiles);
 		} catch (Exception e1) {
 			e1.printStackTrace();
 		}
@@ -176,6 +187,7 @@ public class FunctionFitter extends SwingWorker<Void, Void> {
 		       Mainpeakfitter.setStroke(parent.chart, 0, 2f);
 		       Mainpeakfitter.setDisplayType(parent.chart, 0, false, true);
 		       Mainpeakfitter.setSmallUpTriangleShape(parent.chart, 0);
+		       
 		return null;
 	}
 
@@ -184,11 +196,22 @@ public class FunctionFitter extends SwingWorker<Void, Void> {
 	@Override
 	protected void done() {
 		try {
+			
+			 try {
+				 TextTitle legendText = new TextTitle("Low Frequency (hrs): " 
+			 + parent.nf.format(6.28/((LMparam[timeseries.size()]) * 60)) + "  " +  "High Frequency  (hrs): " 
+						 + parent.nf.format(6.28/((LMparam[timeseries.size() + 1]) * 60) ));
+				 legendText.setPosition(RectangleEdge.RIGHT);
+				 parent.chart.addSubtitle(legendText);
+				 String name = parent.inputfile.getParent() + "//" +  parent.inputfile.getName().replaceFirst("[.][^.]+$", "") + "Fits";
+				ChartUtilities.saveChartAsPNG(new File(name + ".png"),  parent.chart, 800, 800);
+				parent.chart.removeLegend();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			parent.jpb.setIndeterminate(false);
-			get();
-			// JOptionPane.showMessageDialog(jpb.getParent(), "End Points
-			// found and overlayed", "Success",
-			// JOptionPane.INFORMATION_MESSAGE);
+			this.get();
 		} catch (ExecutionException | InterruptedException e) {
 			e.printStackTrace();
 		}

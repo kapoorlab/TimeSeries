@@ -67,7 +67,8 @@ public class LevenbergMarquardtSolverChirp {
 			ChirpFitFunction f,
 			double lambda, 
 			double termepsilon, 
-			int maxiter) throws Exception  {
+			int maxiter, int fileindex, int totalfiles
+			) throws Exception  {
 		int npts = y.length;
 		int nparm = a.length;
 	
@@ -115,7 +116,7 @@ public class LevenbergMarquardtSolverChirp {
 			} //npts
 		
 
-			FitterUtils.SetProgressBarTime(jpb, iter, percent);
+			FitterUtils.SetProgressBarTime(jpb, iter, percent, fileindex + 1, totalfiles);
 			// solve H d = -g, evaluate error at new location
 			//double[] d = DoubleMatrix.solve(H, g);
 			double[] d = null;
@@ -181,8 +182,7 @@ public class LevenbergMarquardtSolverChirp {
 				}
 			}
 			
-			if (IJ.escapePressed()) 
-				done = true;
+			
 		
 
 		} while(!done);
