@@ -105,7 +105,6 @@ public class InteractiveChirpFit implements PlugIn {
 		nf.setMaximumFractionDigits(3);
 	}
 
-	@Override
 	public void run(String arg0) {
 		rtAll = new ResultsTable();
 		jpb = new JProgressBar();

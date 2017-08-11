@@ -115,11 +115,7 @@ public class Mainpeakfitter {
 		renderer.setSeriesStroke(seriesIndex, new BasicStroke(stroke));
 	}
 
-	public static void setShape(final JFreeChart chart, final int seriesIndex, final Shape shape) {
-		final XYPlot plot = chart.getXYPlot();
-		final XYItemRenderer renderer = plot.getRenderer();
-		renderer.setSeriesShape(seriesIndex, shape);
-	}
+	
 
 	public static JFreeChart makeChart(final XYSeriesCollection dataset) {
 		return makeChart(dataset, "XY Chart", "x-axis", "y-axis");

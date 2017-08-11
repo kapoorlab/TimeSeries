@@ -21,7 +21,6 @@ public class AutoListener implements ActionListener {
 		this.rowindex = rowindex;
 	}
 
-	@Override
 	public void actionPerformed(ActionEvent e) {
 
 		int nThreads = 1;

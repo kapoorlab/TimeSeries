@@ -20,7 +20,6 @@ public class LowFrequencyListener implements AdjustmentListener {
 		
 	}
 	
-	@Override
 	public void adjustmentValueChanged( final AdjustmentEvent event )
 	{
 		

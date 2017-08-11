@@ -77,7 +77,6 @@ public class ChirpFileChooser extends JPanel {
 
 		}
 
-		@Override
 		public void actionPerformed(final ActionEvent arg0) {
 			chooserA = new JFileChooser();
 
@@ -95,7 +94,6 @@ public class ChirpFileChooser extends JPanel {
 
 			AllMovies = chooserA.getSelectedFile().listFiles(new FilenameFilter() {
 
-				@Override
 				public boolean accept(File pathname, String filename) {
 
 					return (filename.endsWith(".txt") );

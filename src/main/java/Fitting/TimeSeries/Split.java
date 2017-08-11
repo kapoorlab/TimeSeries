@@ -17,7 +17,6 @@ import chirpModels.UserChirpModel;
 			this.fileindex = fileindex;
 		}
 
-		@Override
 		public void run() {
 			
 			parent.displaymuteclicked(fileindex);

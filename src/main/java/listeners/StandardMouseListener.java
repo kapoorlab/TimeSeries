@@ -20,22 +20,17 @@ public class StandardMouseListener implements MouseListener
 		this.parent = parent;
 	}
 
-	@Override
 	public void mouseReleased( MouseEvent arg0 )
 	{
 		
 		parent.updateCHIRP();
 	}
 
-	@Override
 	public void mousePressed( MouseEvent arg0 ){}
 
-	@Override
 	public void mouseExited( MouseEvent arg0 ) {}
 
-	@Override
 	public void mouseEntered( MouseEvent arg0 ) {}
 
-	@Override
 	public void mouseClicked( MouseEvent arg0 ) {}
 }

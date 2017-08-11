@@ -18,8 +18,7 @@ import org.jfree.ui.RectangleEdge;
 import chirpModels.ChirpFitFunction;
 import chirpModels.LinearChirp;
 import chirpModels.UserChirpModel;
-import net.imglib2.algorithm.BenchmarkAlgorithm;
-import net.imglib2.algorithm.OutputAlgorithm;
+
 import net.imglib2.util.Pair;
 import net.imglib2.util.ValuePair;
 
@@ -197,7 +196,7 @@ public class FunctionFitter extends SwingWorker<Void, Void> {
 	protected void done() {
 		try {
 			
-			 try {
+			
 				 TextTitle legendText = new TextTitle("Low Frequency (hrs): " 
 			 + parent.nf.format(6.28/((LMparam[timeseries.size()]) * 60)) + "  " +  "High Frequency  (hrs): " 
 						 + parent.nf.format(6.28/((LMparam[timeseries.size() + 1]) * 60) ));
@@ -211,10 +210,16 @@ public class FunctionFitter extends SwingWorker<Void, Void> {
 				e.printStackTrace();
 			}
 			parent.jpb.setIndeterminate(false);
-			this.get();
-		} catch (ExecutionException | InterruptedException e) {
-			e.printStackTrace();
-		}
+			try {
+				this.get();
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (ExecutionException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		
 
 	}
 	
